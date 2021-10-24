@@ -1,7 +1,7 @@
 clc 
 clear
 
-image = imread('hoaB.png');
+image = imread('D:/ky_thuat_nhan_dang/hoaA.png');
 gray = rgb2gray(image);
 size(image)
 %# Filter image
@@ -21,7 +21,7 @@ for i = 1:nColors
 end
 
 %Detect edge
-object = rgb2gray(segmented_images{2}); %medfilt2(rgb2gray(segmented_images{1}));
+object = rgb2gray(Ig); %medfilt2(rgb2gray(segmented_images{1}));
 edge = edge(object, 'Canny');
 figure %2
 imshow(edge)
