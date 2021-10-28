@@ -17,35 +17,4 @@ for i=1:length(list_file)
         path_save = [path, 'datasets\', name_flower, '\',int2str(j),'-', list_file(i).name];
         imwrite(image{j}, path_save)
     end
-    %[h, w] = size(gray);
-    %figure
-    %imshow(gray)
-    %nhi =  im2bw(gray);
-    %gray = nhi*255;
-    %thre = gray;
-    %figure
-    %imshow(thre)
-    %edge = edge(gray,'canny', [0.2 0.6]);
-    %se = strel('cube', 2);
-    %edge = imdilate(edge, se);
-    %se = strel('cube', 1);
-    %edge = imerode(edge, se);
-    %figure
-    %imshow(edge)
-    %out = find_biggest_contour(edge);
-    %interior_filled = fill_contour(out);
-    %BW = im_org;
-    %BW(:,:,1) = interior_filled;
-    %BW(:,:,2) = interior_filled;
-    %BW(:,:,3) = interior_filled;
-
-    %Crop image with mask
-    %object = Ig;
-    %object(BW ==0) = 0;
-    %figure;
-    %imshow(object);
-    %figure
-    %imshow(edge);
 end
-
-
