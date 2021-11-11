@@ -1,32 +1,37 @@
 clc
 clear all
 
-path = 'Test'
-train = ''
+test = 'test.mat'
+train = 'train.mat'
 
-datasets = load(path);
+K = 5
+
+datasets = load(test);
 datasets = datasets.datasets;
 N = length(datasets);
 
-n1 = datasets(200, :);
-label_test = n1(1);
-data_test = n1(2:end);
 
-knn(data_test, path)
-
-predict = []
-truth = []
+predict = [];
+truth = [];
 for i=1:N
     n1 = datasets(i, :);
     label_test = n1(1);
     data_test = n1(2:end);
     
-    pred = knn(data_test, path)
+    pred = knn(data_test, train, K);
     
-    truth(end+1) = label_test
-    predict(end+1) = pred
+    truth(end+1) = label_test;
+    predict(end+1) = pred;
+end
     
-plotconfusion(truth,predict)
+truth(1:45)
+predict(1:45)
+
+
+
+C = confusionmat(truth', predict', 'Order', [1,2,3,4,5])
+plotConfMat(C, {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'})
+
 
 
 
