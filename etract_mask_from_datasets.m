@@ -1,7 +1,7 @@
 clc;
 clear all;
 
-name_class = 'lotus'
+name_class = 'daisy'
 dataset_path = ['datasets\', name_class]
 
 dataset_seg_path = ['datasets_seg\', name_class]
@@ -11,6 +11,10 @@ files = dir([dataset_path, '\*.jpg']);
 for i = 1:length(files)
     image = imread([dataset_path, '\',files(i).name]);
     image = segment_color(image, 2);
+    
+    image = ExtractNLargestBlobs(image, 1);
+    image = imfill(image, 'holes');
+    
     name_img = strsplit(files(i).name, '.');
     name_img = name_img(1:length(name_img)-1);
     imwrite(image, [dataset_seg_path, '\', char(name_img), '.tif'])
