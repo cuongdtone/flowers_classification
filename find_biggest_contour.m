@@ -1,5 +1,6 @@
 function out = find_biggest_contour(edge)
-%Find biggest contour
+% Find biggest contour
+% Dev: Cuong Tran
 im_fill = imfill(edge, 'holes');
 s = regionprops(im_fill, 'Area', 'PixelList');
 [~,ind] = max([s.Area]);

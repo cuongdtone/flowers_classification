@@ -1,0 +1,1 @@
+run TrichXuat_kmean.m

@@ -1,5 +1,8 @@
 function S=hu_moment(J)
-%Thien
+
+% Caculation Hu Moment vector from Binary Mask
+% Dev: Thien Le Van, Duy Ngu Dao
+
 format long;
 [w,h]=size(J);
 x_=0;

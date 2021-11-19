@@ -1,4 +1,5 @@
 function out = segment_color(image, nColors );
+% Segmentation color wiht Kmean method
 cform = makecform('srgb2lab');
 lab_he = applycform(image, cform);
  

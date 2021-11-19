@@ -1,18 +1,8 @@
 function plotConfMat(varargin)
-%PLOTCONFMAT plots the confusion matrix with colorscale, absolute numbers
-%   and precision normalized percentages
-%
-%   usage: 
-%   PLOTCONFMAT(confmat) plots the confmat with integers 1 to n as class labels
-%   PLOTCONFMAT(confmat, labels) plots the confmat with the specified labels
-%
-%   Vahe Tshitoyan
-%   20/08/2017
-%
-%   Arguments
-%   confmat:            a square confusion matrix
-%   labels (optional):  vector of class labels
-% number of arguments
+% Edit: Cuong Tran
+% Thank for author! Vahe Tshitoyan.
+% Visualize Confusion Matrix
+
 switch (nargin)
     case 0
        confmat = 1;
@@ -31,7 +21,7 @@ confpercent = 100*confmat./repmat(sum(confmat, 1),numlabels,1);
 % plotting the colors
 imagesc(confpercent);
 title(sprintf('Accuracy: %.2f%%', 100*trace(confmat)/sum(confmat(:))));
-ylabel('Output Class'); xlabel('Target Class');
+ylabel('Predict'); xlabel('Truth');
 % set the colormap
 colormap(flipud(gray));
 % Create strings from the matrix values and remove spaces

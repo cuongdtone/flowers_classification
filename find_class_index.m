@@ -1,6 +1,8 @@
 clc
 clear all
 
+% Support to identify label index of datasets download from Internet
+% Dev: Cuong Tran
 label = load('F:\archive\imagelabels.mat');
 label = label.labels;
 

@@ -1,6 +1,9 @@
 clc
 clear all
 
+% Support to database restructuring
+% Dev: Cuong Tran
+
 %Labeling
 class_index_move = 18
 name_class = 'lily'

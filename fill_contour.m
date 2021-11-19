@@ -1,5 +1,6 @@
 function out = fill_contour(biggest_contour);
-%Fill contour
+% Fill contour
+% Dev: Cuong Tran
 binaryImage = biggest_contour;
 [rows, columns] = size(binaryImage);
 for col = 1 : columns
