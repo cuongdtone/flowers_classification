@@ -6,7 +6,7 @@ clear all;
 % Structure: Same origin dataset but format of image is .tif (binary image)
 % Dev: Cuong Tran, Thien Le Van, Duy Ngu Dao
 
-path_datasets_binary_mask = 'Test\'
+path_datasets_binary_mask = 'datasets_seg\'
 
 name_class = {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'};
 datasets = [];
@@ -18,6 +18,9 @@ for i = 1:5
     list_label = []
     for j = 1:length(files)
         image = imread([dataset_path, '\',files(j).name]);
+        image = logical(image);
+        image = image(:,:,1);
+
         image = double(image);
         S = hu_moment(image);
         label = i;

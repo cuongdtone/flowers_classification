@@ -1,4 +1,4 @@
-% Dev: Cuong Tran
+%==============================================================================================
 % Function to return the specified number of largest or smallest blobs in a binary image.
 % If numberToExtract > 0 it returns the numberToExtract largest blobs.
 % If numberToExtract < 0 it returns the numberToExtract smallest blobs.

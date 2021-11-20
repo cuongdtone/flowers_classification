@@ -31,7 +31,7 @@ for i=1:5
         image = imread([dataset_path, '\',files(i).name]);
         image = segment_color(image, 2);
         image = ExtractNLargestBlobs(image, 1);
-        %image = imfill(image, 'holes');
+        image = imfill(image, 'holes');
 
         name_img = strsplit(files(i).name, '.');
         name_img = name_img(1:length(name_img)-1);

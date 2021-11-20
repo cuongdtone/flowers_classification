@@ -11,11 +11,20 @@ function predict = knn(data_test, datasets, K, pass_element)
 % pass element = i : 0<i<len(datasets) remove data point i from training set
 % pass element = -1: don't remove any point
 
-N = length(datasets);
+N = size(datasets, 1);
 list_d = []; % K distance from (test data to K datas) in training set
 list_label = []; % corresponding label
 except = -1; %template match
 for i=1:N
+    if i==1&&K==1
+        n1 = datasets(i, :);
+        label2 = n1(1);
+        data2 = n1(2:end);   
+        d = euclid(data_test, data2);
+        
+        list_d(end+1) = d;
+        list_label(end+1) = label2;
+    end
     if i ~= pass_element
         n1 = datasets(i, :);
         label2 = n1(1);

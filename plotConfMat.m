@@ -21,7 +21,7 @@ confpercent = 100*confmat./repmat(sum(confmat, 1),numlabels,1);
 % plotting the colors
 imagesc(confpercent);
 title(sprintf('Accuracy: %.2f%%', 100*trace(confmat)/sum(confmat(:))));
-ylabel('Predict'); xlabel('Truth');
+ylabel('Truth'); xlabel('Predict');
 % set the colormap
 colormap(flipud(gray));
 % Create strings from the matrix values and remove spaces

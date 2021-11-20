@@ -1,5 +1,5 @@
-clc
-clear
+clc;
+clear all;
 
 % Set image (format .jpg or you can change at line 8) in directory name Put test data here
 % For each image, one figure show original image, mask and predict (title)
