@@ -56,4 +56,4 @@ fprintf('Finish.\n')
 %*******************AREA PLOT CONFUSION MATRIX***************
 idx_cls = [linspace(1, num_class, num_class)];
 C = confusionmat(label_test_index', index_predict', 'Order', idx_cls);
-plotConfMat(C, class)  
+plotConfMat(C', class)  
