@@ -16,15 +16,6 @@ list_d = []; % K distance from (test data to K datas) in training set
 list_label = []; % corresponding label
 except = -1; %template match
 for i=1:N
-    if i==1&&K==1
-        n1 = datasets(i, :);
-        label2 = n1(1);
-        data2 = n1(2:end);   
-        d = euclid(data_test, data2);
-        
-        list_d(end+1) = d;
-        list_label(end+1) = label2;
-    end
     if i ~= pass_element
         n1 = datasets(i, :);
         label2 = n1(1);
@@ -35,7 +26,7 @@ for i=1:N
             except = label2;
         end
         
-        if i<=K %initial K distance
+        if length(list_d)<K %initial K distance
             list_d(end+1) = d;
             list_label(end+1) = label2;
         else %Update list K
@@ -58,7 +49,7 @@ for i=1:N
     end
     
 end
-
+list_label;
 if except ~= -1
     %template match
     predict = except;
