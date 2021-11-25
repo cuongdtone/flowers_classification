@@ -1,4 +1,6 @@
 function varargout = GUI_flower_classification(varargin)
+addpath(genpath('.\ultis'));
+addpath(genpath('.\models'));
     gui_Singleton = 1;
     gui_State = struct('gui_Name',       mfilename, ...
                        'gui_Singleton',  gui_Singleton, ...
@@ -31,21 +33,33 @@ function load_test_data_Callback(hObject, eventdata, handles)
     path = uigetdir;
     files = dir([path, '\*.jpg']);
     idx = 1;
+    set(handles.result, 'String','Loading ...');
+    drawnow;
 
     set(handles.number_image, 'String',[num2str(idx), '/', num2str(length(files))]);
     image = imread([path, '\',files(idx).name]);
     axes(handles.axes1);
     imshow(image);
 
-    set(handles.result, 'String','Loading ...');
+    
     feature_method = get(handles.feature, 'Value');
     model = get(handles.model, 'Value');
-    [binary_mask, pred] = predict(image, feature_method, model);
+    K = str2num(get(handles.k_number, 'String'))
+    [binary_mask, pred] = predict_m(image, feature_method, model, K);
     axes(handles.axes2);
     imshow(binary_mask);
     set(handles.result, 'String', ['This is ', pred]);
 
 function feature_Callback(hObject, eventdata, handles)
+model = get(handles.model, 'Value');
+feature_method = get(handles.feature, 'Value');
+if model ==1
+    if feature_method==1
+        set(handles.k_number, 'String','7');
+    else
+        set(handles.k_number, 'String','5');
+    end
+end
 
 function feature_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
@@ -54,7 +68,8 @@ function feature_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on selection change in model.
 function model_Callback(hObject, eventdata, handles)
-
+set(handles.edit_k, 'String','');
+set(handles.k_number, 'String','x');
 % --- Executes during object creation, after setting all properties.
 function model_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
@@ -67,34 +82,49 @@ function load_test_set_Callback(hObject, eventdata, handles)
     path = uigetdir;
     set(handles.result, 'String','Loading ...');
     drawnow;
-    test_set = create_test_set(path);
+    feature_method = get(handles.feature, 'Value');
+    test_set = create_test_set(path, feature_method);
     path_test = 'test.mat'
-    train = 'datasets_humoment.mat'
-
+    
+    
     %load model
+    train = 'datasets_humoment.mat'
     datasets = load(train);
     datasets = datasets.datasets;
-    K = 7;
+    K = str2num(get(handles.k_number, 'String'));
 
     CM = HU_KNN_evaluate_train_test_split(path_test, datasets);
     axes(handles.axes1);
-    plotConfMat(CM, {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+    plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
     axes(handles.axes2);
     imshow(imread('logo.png'));
     set(handles.result, 'String','Complete !');
     
 % --- Executes on button press in show_loocv.
 function show_loocv_Callback(hObject, eventdata, handles)
+    set(handles.result, 'String','Loading ...');
+    axes(handles.axes1);
+    imshow(imread('logo.png'));
+    axes(handles.axes2);
+    imshow(imread('logo.png'));
+    drawnow;
     feature = get(handles.feature, 'Value');
     model = get(handles.model, 'Value');
     if model==1 && feature==1
         %Hu-KNN
-        CM = HU_KNN_LOOCV();
+        K = str2num(get(handles.k_number, 'String'))
+        CM = KNN_LOOCV('datasets_humoment.mat', K);
         axes(handles.axes1);
-        plotConfMat(CM, {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
-        axes(handles.axes2);
-        imshow(imread('logo.png'));
+        plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+    elseif model==1 && feature==2
+        %Hog-KNN
+        K = str2num(get(handles.k_number, 'String'))
+        CM = KNN_LOOCV('datasets_hog.mat', K);
+        axes(handles.axes1);
+        plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
     end
+    set(handles.result, 'String','Complete !');
+    drawnow;
 
 % --- Executes on button press in back.
 function back_Callback(hObject, eventdata, handles)
@@ -112,7 +142,8 @@ function back_Callback(hObject, eventdata, handles)
 
         feature_method = get(handles.feature, 'Value');
         model = get(handles.model, 'Value');
-        [binary_mask, pred] = predict(image, feature_method, model);
+        K = str2num(get(handles.k_number, 'String'))
+        [binary_mask, pred] = predict_m(image, feature_method, model, K);
         axes(handles.axes2);
         imshow(binary_mask);
         set(handles.result, 'String', ['This is ', pred]);
@@ -134,7 +165,8 @@ function next_Callback(hObject, eventdata, handles)
 
         feature_method = get(handles.feature, 'Value');
         model = get(handles.model, 'Value');
-        [binary_mask, pred] = predict(image, feature_method, model);
+        K = str2num(get(handles.k_number, 'String'))
+        [binary_mask, pred] = predict_m(image, feature_method, model, K);
         axes(handles.axes2);
         imshow(binary_mask);
         set(handles.result, 'String', ['This is ', pred]);
@@ -143,6 +175,8 @@ function next_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in load_image.
 function load_image_Callback(hObject, eventdata, handles)
+     global files path idx;
+     idx = 1;
     [files, path] = uigetfile('*.jpg');
     set(handles.result, 'String','Loading ...');
     image = imread([path, files]);
@@ -151,8 +185,55 @@ function load_image_Callback(hObject, eventdata, handles)
 
     feature_method = get(handles.feature, 'Value');
     model = get(handles.model, 'Value');
-    [binary_mask, pred] = predict(image, feature_method, model);
+    K = str2num(get(handles.k_number, 'String'));
+    [binary_mask, pred] = predict_m(image, feature_method, model, K);
     axes(handles.axes2);
     imshow(binary_mask);
 
-    set(handles.result, 'String', ['Predict: ', pred]);
+    set(handles.result, 'String', ['This is ', pred]);
+
+
+% --- Executes on button press in reload.
+function reload_Callback(hObject, eventdata, handles)
+    global idx files path;
+    if ischar(files)==1
+        path_img = [path, '\',files];
+    else
+        path_img = [path, '\',files(idx).name];
+    end
+    set(handles.number_image, 'String',[num2str(idx), '/', num2str(length(files))]);
+    set(handles.result, 'String','Loading ...');
+    image = imread(path_img);
+    axes(handles.axes1);
+    imshow(image);
+
+    feature_method = get(handles.feature, 'Value');
+    model = get(handles.model, 'Value');
+    K = str2num(get(handles.k_number, 'String'));
+    [binary_mask, pred] = predict_m(image, feature_method, model, K);
+    axes(handles.axes2);
+    imshow(binary_mask);
+    set(handles.result, 'String', ['This is ', pred]);
+
+
+
+function k_number_Callback(hObject, eventdata, handles)
+% hObject    handle to k_number (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of k_number as text
+%        str2double(get(hObject,'String')) returns contents of k_number as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function k_number_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to k_number (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
