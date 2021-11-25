@@ -1,0 +1,22 @@
+
+clc
+clear all
+
+train = 'datasets_humoment.mat';
+datasets = load(train);
+datasets = datasets.datasets;
+
+data = datasets(:, 2:end);
+label = datasets(:, 1);
+
+partition = [];
+for i=1:length(label)-1
+    if label(i) ~= label(i+1)
+        partition(end+1) = i
+    end
+end
+
+n = kmeans(data, 5);
+
+pred_1 = n(1:partition(1));
+pred_2 = n(partition(1)+1:parit

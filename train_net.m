@@ -5,7 +5,7 @@ addpath(genpath('.\ultis'));
 addpath(genpath('.\models'));
 
 
-path = 'hulog.mat';
+path = 'hu_3.mat';
 
 datasets = load(path);
 datasets = datasets.datasets;
@@ -15,8 +15,8 @@ t = one_hot(label);
 x = ((datasets(:, 2:end)'));
 
 net = patternnet(8);
-net.trainParam.epochs=1000000;
-net.trainParam.lr=0.0005;
+net.trainParam.epochs=100000;
+net.trainParam.lr=0.001;
 net = train(net,x,t);
 
 y = net(x)

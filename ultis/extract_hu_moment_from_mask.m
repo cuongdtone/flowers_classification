@@ -22,15 +22,15 @@ for i = 1:5
     for j = 1:length(files)
         image = imread([dataset_path, '\',files(j).name]);
         image = image(:,:,1);
-        %image = logical(image);
+        image = logical(image);
 
-        S = hu_moment(image);
+        S = hu_moment_2(image);
 
         label = i;
         data = [label, S]
         datasets(end+1, :) = data;
     end
 end
-save hulog datasets
+save hu_3 datasets
 
 
