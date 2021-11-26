@@ -9,11 +9,21 @@ binary_mask = logical(binary_mask(:,:,1));
 
 if feature_method==1 && model == 1
     %HU_KNN
+    binary_mask = imfill(binary_mask, 'holes');
     feature = hu_moment(binary_mask);
     train = 'datasets_humoment.mat';
     datasets = load(train);
     datasets = datasets.datasets;
     predict = knn(feature, datasets, K, -1);
+elseif feature_method==1 && model==2
+    %HU-Neural Network
+    binary_mask = imfill(binary_mask, 'holes');
+    feature = hu_moment(binary_mask);
+    feature = -sign(feature).*(log10(abs(feature)));
+    load hu_net
+    predict = net(feature');
+    predict = vec2ind(predict);
+    
 elseif feature_method==2 && model==1
     %HOG_KNN
     image_gray = rgb2gray(image);

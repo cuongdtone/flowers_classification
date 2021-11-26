@@ -2,6 +2,7 @@ clc;
 clear all;
 addpath(genpath('.\ultis'));
 addpath(genpath('.\models'));
+addpath(genpath('.\hu'));
 
 % This module: extract Hu moment matrix and save file mat from
 % datasets_binary_mask
@@ -23,7 +24,7 @@ for i = 1:5
         image = imread([dataset_path, '\',files(j).name]);
         image = image(:,:,1);
         image = logical(image);
-
+	
         S = hu_moment_2(image);
 
         label = i;
@@ -31,6 +32,6 @@ for i = 1:5
         datasets(end+1, :) = data;
     end
 end
-save hu_3 datasets
+save hu_4 datasets
 
 

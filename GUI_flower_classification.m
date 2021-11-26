@@ -40,7 +40,9 @@ function load_test_data_Callback(hObject, eventdata, handles)
     image = imread([path, '\',files(idx).name]);
     axes(handles.axes1);
     imshow(image);
-
+    
+    set(handles.show_1, 'String','Origin');
+    set(handles.show_2, 'String','Processed');
     
     feature_method = get(handles.feature, 'Value');
     model = get(handles.model, 'Value');
@@ -70,6 +72,7 @@ function feature_CreateFcn(hObject, eventdata, handles)
 function model_Callback(hObject, eventdata, handles)
 set(handles.edit_k, 'String','');
 set(handles.k_number, 'String','x');
+set(handles.show_loocv, 'String','Hold-out');
 % --- Executes during object creation, after setting all properties.
 function model_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
@@ -83,17 +86,23 @@ function load_test_set_Callback(hObject, eventdata, handles)
     set(handles.result, 'String','Loading ...');
     drawnow;
     feature_method = get(handles.feature, 'Value');
-    test_set = create_test_set(path, feature_method);
+    %test_set = create_test_set(path, feature_method);
     path_test = 'test.mat'
     
     
-    %load model
-    train = 'datasets_humoment.mat'
-    datasets = load(train);
-    datasets = datasets.datasets;
+    %load model KNN
+    if feature_method==1
+        train = 'datasets_humoment.mat'
+        datasets = load(train);
+        datasets = datasets.datasets;
+    else
+        datasets = load('datasets_hog.mat');
+        datasets = datasets.datasets;
+    end
+    
     K = str2num(get(handles.k_number, 'String'));
 
-    CM = HU_KNN_evaluate_train_test_split(path_test, datasets);
+    CM = KNN_evaluate_train_test_split(path_test, datasets, K);
     axes(handles.axes1);
     plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
     axes(handles.axes2);
@@ -116,11 +125,56 @@ function show_loocv_Callback(hObject, eventdata, handles)
         CM = KNN_LOOCV('datasets_humoment.mat', K);
         axes(handles.axes1);
         plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+        set(handles.show_1, 'String', 'LOOCV');
     elseif model==1 && feature==2
         %Hog-KNN
         K = str2num(get(handles.k_number, 'String'))
         CM = KNN_LOOCV('datasets_hog.mat', K);
         axes(handles.axes1);
+        plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+    elseif model==2 && feature==1
+        %Hu-Neural Network
+        load CM_test_hu_nn
+        set(handles.show_1, 'String', 'Test Set');
+        axes(handles.axes1);
+        plotConfMat(CM_test,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+        load hu_net
+        path = 'datasets_humoment.mat';
+
+        datasets = load(path);
+        datasets = datasets.datasets;
+        label = datasets(:, 1);
+        t = one_hot(label);
+        x = ((datasets(:, 2:end)'));
+        x = -sign(x).*(log10(abs(x)));
+        y = net(x);
+        classes = vec2ind(y);
+        truth = vec2ind(t);
+        CM = confusionmat(classes, truth, 'Order', [1,2,3, 4, 5]);
+        set(handles.show_2, 'String', 'Dataset Set');
+        axes(handles.axes2);
+        plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+    elseif model==2 && feature==2
+        %Hog-Neural Network
+        load CM_test_hog_nn
+        set(handles.show_1, 'String', 'Test Set');
+        axes(handles.axes1);
+        plotConfMat(CM_test,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+        
+        load hog_net
+        path = 'datasets_hog.mat';
+
+        datasets = load(path);
+        datasets = datasets.datasets;
+        label = datasets(:, 1);
+        t = one_hot(label);
+        x = ((datasets(:, 2:end)'));
+        y = net(x);
+        classes = vec2ind(y);
+        truth = vec2ind(t);
+        CM = confusionmat(classes, truth, 'Order', [1,2,3, 4, 5]);
+        set(handles.show_2, 'String', 'Dataset Set');
+        axes(handles.axes2);
         plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
     end
     set(handles.result, 'String','Complete !');
@@ -182,7 +236,9 @@ function load_image_Callback(hObject, eventdata, handles)
     image = imread([path, files]);
     axes(handles.axes1);
     imshow(image);
-
+    
+    set(handles.show_1, 'String','Origin');
+    set(handles.show_2, 'String','Processed');
     feature_method = get(handles.feature, 'Value');
     model = get(handles.model, 'Value');
     K = str2num(get(handles.k_number, 'String'));
