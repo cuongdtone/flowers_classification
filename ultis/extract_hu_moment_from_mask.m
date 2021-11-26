@@ -25,7 +25,7 @@ for i = 1:5
         image = image(:,:,1);
         image = logical(image);
 	
-        S = hu_moment_2(image);
+        S = hu_moment(image);
 
         label = i;
         data = [label, S]
