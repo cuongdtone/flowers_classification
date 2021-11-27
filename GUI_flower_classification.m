@@ -83,15 +83,15 @@ function model_CreateFcn(hObject, eventdata, handles)
 % --- Executes on button press in load_test_set.
 function load_test_set_Callback(hObject, eventdata, handles)
     path = uigetdir;
+    model = get(handles.model, 'Value');
+    feature = get(handles.feature, 'Value');
     set(handles.result, 'String','Loading ...');
     drawnow;
-    feature_method = get(handles.feature, 'Value');
-    %test_set = create_test_set(path, feature_method);
+    test_set = create_test_set(path, feature);
     path_test = 'test.mat'
-    
-    
+
     %load model KNN
-    if feature_method==1
+    if feature==1
         train = 'datasets_humoment.mat'
         datasets = load(train);
         datasets = datasets.datasets;
@@ -99,10 +99,8 @@ function load_test_set_Callback(hObject, eventdata, handles)
         datasets = load('datasets_hog.mat');
         datasets = datasets.datasets;
     end
-    
     K = str2num(get(handles.k_number, 'String'));
-
-    CM = KNN_evaluate_train_test_split(path_test, datasets, K);
+    CM = evaluate_train_test_split(path_test, datasets, model, feature, K);
     axes(handles.axes1);
     plotConfMat(CM,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
     axes(handles.axes2);
@@ -137,7 +135,7 @@ function show_loocv_Callback(hObject, eventdata, handles)
         load CM_test_hu_nn
         set(handles.show_1, 'String', 'Test Set');
         axes(handles.axes1);
-        plotConfMat(CM_test,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+        plotConfMat(CM_test',  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
         load hu_net
         path = 'datasets_humoment.mat';
 
@@ -159,7 +157,7 @@ function show_loocv_Callback(hObject, eventdata, handles)
         load CM_test_hog_nn
         set(handles.show_1, 'String', 'Test Set');
         axes(handles.axes1);
-        plotConfMat(CM_test,  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
+        plotConfMat(CM_test',  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'});
         
         load hog_net
         path = 'datasets_hog.mat';
