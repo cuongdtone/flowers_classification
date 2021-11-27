@@ -36,7 +36,7 @@ function datasets = create_test_set(path, feature_method)
                 image_gray = rgb2gray(image);
                 image_gray(binary_mask==0) = 0;
                 image_gray = cut_image(image_gray);
-                S = extract_HOG(image_gray,[64,64])
+                S = extract_HOG(image_gray,[64,64]);
             end
             label = i;
             data = [label, S];

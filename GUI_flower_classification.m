@@ -70,15 +70,21 @@ function feature_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on selection change in model.
 function model_Callback(hObject, eventdata, handles)
-set(handles.edit_k, 'String','');
-set(handles.k_number, 'String','x');
-set(handles.show_loocv, 'String','Hold-out');
+model = get(handles.model, 'Value');
+if model ==2
+    set(handles.edit_k, 'String','');
+    set(handles.k_number, 'String','x');
+    set(handles.show_loocv, 'String','Hold-out');
+else
+    set(handles.edit_k, 'String','K = ');
+    set(handles.k_number, 'String','5');
+    set(handles.show_loocv, 'String','LOOCV');
+end
 % --- Executes during object creation, after setting all properties.
 function model_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
     end
-
 
 % --- Executes on button press in load_test_set.
 function load_test_set_Callback(hObject, eventdata, handles)
