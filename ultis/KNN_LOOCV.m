@@ -1,8 +1,5 @@
 % Evaluate model HU-KNN based on LOOCV method
 % Plot Confusion Matrix 
-% Dev: Cuong Tran
-
-
 function CM = KNN_LOOCV(train, K)
     % load model
     %train = 'datasets_hog.mat';

@@ -1,5 +1,5 @@
 function J =cut_image(I)
-%crop boundingbox of object
+% crop boundingbox of object
 
 [w,h]=size(I);
 x_min=1;

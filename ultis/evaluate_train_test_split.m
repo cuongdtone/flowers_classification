@@ -1,5 +1,5 @@
- % Please create test data with code create_test_set.m
-
+% Please create test data with code create_test_set.m
+% Evaluate model with test set 
 function CM = evaluate_train_test_split(path_test, datasets, model, feature, K)
     %load test set
     datasets_test = load(path_test);

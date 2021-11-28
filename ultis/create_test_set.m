@@ -17,7 +17,7 @@ function datasets = create_test_set(path, feature_method)
     datasets = [];
 
     for i = 1:5
-        dataset_path = [path,'\', char(name_class(i))]
+        dataset_path = [path,'\', char(name_class(i))];
         files = dir([dataset_path, '\*.jpg']);
         list_S = [];
         list_label = [];

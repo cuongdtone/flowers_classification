@@ -1,3 +1,4 @@
+% Support 4 models: HU-KNN, HU-ANN, HOG-KNN, HOG-ANN
 function [binary_mask, pred] = predict_m(image, feature_method, model, K)
 addpath(genpath('.\ultis\HOG'))
 name_class =  {'daisy', 'rose', 'hibiscus', 'lotus', 'sunflower'};
@@ -50,7 +51,4 @@ elseif feature_method==2 && model==2
     predict = vec2ind(y);
     
 end
-    
-    
-
 pred = name_class(predict);

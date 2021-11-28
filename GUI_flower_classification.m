@@ -1,3 +1,8 @@
+% Flower recognition
+% Dev: Cuong Tran
+% Team: Le Van Thien, Dao Duy Ngu, Ho Thanh Long, Nguyen Vu Hoai Duy
+% GVHD: Hoang Le Uyen Thuc - HP Ky Thuat Nhan Dang
+% 27/11/2021
 function varargout = GUI_flower_classification(varargin)
 addpath(genpath('.\ultis'));
 addpath(genpath('.\models'));
@@ -18,8 +23,6 @@ addpath(genpath('.\models'));
         gui_mainfcn(gui_State, varargin{:});
     end
 % End initialization code - DO NOT EDIT
-
-
 % --- Executes just before GUI_flower_classification is made visible.
 function GUI_flower_classification_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.output = hObject;
