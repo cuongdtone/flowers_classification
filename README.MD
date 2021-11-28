@@ -1,6 +1,6 @@
 # Flower Classification  
 ## Introduce 
-This is final project of  the course
+This is final project of  the course  
 GVHD: Hoang Le Uyen Thuc   
 HP: Ky Thuat Nhan Dang  
 The University of Danang - University of Science and Technology
