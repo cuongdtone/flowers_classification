@@ -18,11 +18,12 @@ function datasets = create_test_set(path, feature_method)
 
     for i = 1:5
         dataset_path = [path,'\', char(name_class(i))];
-        files = get_file_image(dataset_path);
+        files = dir([dataset_path, '\*.jpg']);
         list_S = [];
         list_label = [];
         for j = 1:length(files)
-            image = imread(files(j).path);
+            image = imread([dataset_path, '\',files(j).name]);
+
             
             binary_mask = segment_color(image, 2);
             binary_mask = double(ExtractNLargestBlobs(binary_mask, 1)); %value 0 and 1

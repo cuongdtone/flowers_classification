@@ -34,13 +34,13 @@ function varargout = GUI_flower_classification_OutputFcn(hObject, eventdata, han
 function load_test_data_Callback(hObject, eventdata, handles)
     global path files idx;
     path = uigetdir;
-    files = get_file_image(path);
+    files = dir([path, '\*.jpg']);
     idx = 1;
     set(handles.result, 'String','Loading ...');
     drawnow;
 
     set(handles.number_image, 'String',[num2str(idx), '/', num2str(length(files))]);
-    image = imread(files(idx).path);
+    image = imread([path, '\',files(idx).name]);
     axes(handles.axes1);
     imshow(image);
     
@@ -91,7 +91,7 @@ function model_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on button press in load_test_set.
 function load_test_set_Callback(hObject, eventdata, handles)
-    path = uigetdir
+    path = uigetdir;
     model = get(handles.model, 'Value');
     feature = get(handles.feature, 'Value');
     set(handles.result, 'String','Loading ...');
@@ -220,7 +220,7 @@ function next_Callback(hObject, eventdata, handles)
     else
         set(handles.number_image, 'String',[num2str(idx), '/', num2str(length(files))]);
         set(handles.result, 'String','Loading ...');
-        image = imread(files(idx).path);
+        image = imread([path, '\',files(idx).name]);
         axes(handles.axes1);
         imshow(image);
 
