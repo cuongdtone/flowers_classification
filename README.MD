@@ -16,5 +16,4 @@ Load 1 image to predict
 Load 1 folder containing images to predict  
 Load test set and start model evaluation  
 ## Dev
-```Cuong Tran
-Le Van Thien```
+```Cuong Tran, Le Van Thien```
